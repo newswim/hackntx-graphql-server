@@ -1,0 +1,12 @@
+{
+  "projects": {
+    "hackntx": {
+      "schemaPath": "schema.graphql",
+      "extensions": {
+        "endpoints": {
+          "dev": "hackntx.herokuapp.com/v1alpha1/graphql"
+        }
+      }
+    }
+  }
+}

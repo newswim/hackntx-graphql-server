@@ -1,0 +1,1131 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+# conflict action
+enum conflict_action {
+  # ignore the insert on this row
+  ignore
+
+  # update the row with the given values
+  update
+}
+
+scalar float8
+
+# expression to compare columns of type float8. All fields are combined with logical 'AND'.
+input float8_comparison_exp {
+  _eq: float8
+  _gt: float8
+  _gte: float8
+  _in: [float8]
+  _is_null: Boolean
+  _lt: float8
+  _lte: float8
+  _neq: float8
+  _nin: [float8]
+}
+
+scalar geometry
+
+# expression to compare columns of type geometry. All fields are combined with logical 'AND'.
+input geometry_comparison_exp {
+  _eq: geometry
+  _gt: geometry
+  _gte: geometry
+  _in: [geometry]
+  _is_null: Boolean
+  _lt: geometry
+  _lte: geometry
+  _neq: geometry
+  _nin: [geometry]
+}
+
+# expression to compare columns of type integer. All fields are combined with logical 'AND'.
+input integer_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int]
+}
+
+# mutation root
+type mutation_root {
+  # delete data from the table: "topology.layer"
+  delete_topology_layer(
+    # filter the rows which have to be deleted
+    where: topology_layer_bool_exp!
+  ): topology_layer_mutation_response
+
+  # delete data from the table: "waze2018"
+  delete_waze2018(
+    # filter the rows which have to be deleted
+    where: waze2018_bool_exp!
+  ): waze2018_mutation_response
+
+  # insert data into the table: "topology.layer"
+  insert_topology_layer(
+    # the rows to be inserted
+    objects: [topology_layer_insert_input!]!
+
+    # on conflict condition
+    on_conflict: topology_layer_on_conflict
+  ): topology_layer_mutation_response
+
+  # insert data into the table: "waze2018"
+  insert_waze2018(
+    # the rows to be inserted
+    objects: [waze2018_insert_input!]!
+
+    # on conflict condition
+    on_conflict: waze2018_on_conflict
+  ): waze2018_mutation_response
+
+  # update data of the table: "topology.layer"
+  update_topology_layer(
+    # increments the integer columns with given value of the filtered values
+    _inc: topology_layer_inc_input
+
+    # sets the columns of the filtered rows to the given values
+    _set: topology_layer_set_input
+
+    # filter the rows which have to be updated
+    where: topology_layer_bool_exp!
+  ): topology_layer_mutation_response
+
+  # update data of the table: "waze2018"
+  update_waze2018(
+    # increments the integer columns with given value of the filtered values
+    _inc: waze2018_inc_input
+
+    # sets the columns of the filtered rows to the given values
+    _set: waze2018_set_input
+
+    # filter the rows which have to be updated
+    where: waze2018_bool_exp!
+  ): waze2018_mutation_response
+}
+
+# column ordering options
+enum order_by {
+  # in the ascending order, nulls last
+  asc
+
+  # in the ascending order, nulls first
+  asc_nulls_first
+
+  # in the ascending order, nulls last
+  asc_nulls_last
+
+  # in the descending order, nulls first
+  desc
+
+  # in the descending order, nulls first
+  desc_nulls_first
+
+  # in the descending order, nulls last
+  desc_nulls_last
+}
+
+# query root
+type query_root {
+  # fetch data from the table: "topology.layer"
+  topology_layer(
+    # distinct select on columns
+    distinct_on: [topology_layer_select_column!]
+
+    # limit the nuber of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [topology_layer_order_by!]
+
+    # filter the rows returned
+    where: topology_layer_bool_exp
+  ): [topology_layer!]!
+
+  # fetch aggregated fields from the table: "topology.layer"
+  topology_layer_aggregate(
+    # distinct select on columns
+    distinct_on: [topology_layer_select_column!]
+
+    # limit the nuber of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [topology_layer_order_by!]
+
+    # filter the rows returned
+    where: topology_layer_bool_exp
+  ): topology_layer_aggregate!
+
+  # fetch data from the table: "topology.layer" using primary key columns
+  topology_layer_by_pk(layer_id: Int!, topology_id: Int!): topology_layer
+
+  # fetch data from the table: "waze2018"
+  waze2018(
+    # distinct select on columns
+    distinct_on: [waze2018_select_column!]
+
+    # limit the nuber of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [waze2018_order_by!]
+
+    # filter the rows returned
+    where: waze2018_bool_exp
+  ): [waze2018!]!
+
+  # fetch aggregated fields from the table: "waze2018"
+  waze2018_aggregate(
+    # distinct select on columns
+    distinct_on: [waze2018_select_column!]
+
+    # limit the nuber of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [waze2018_order_by!]
+
+    # filter the rows returned
+    where: waze2018_bool_exp
+  ): waze2018_aggregate!
+
+  # fetch data from the table: "waze2018" using primary key columns
+  waze2018_by_pk(event_id: String!): waze2018
+}
+
+# subscription root
+type subscription_root {
+  # fetch data from the table: "topology.layer"
+  topology_layer(
+    # distinct select on columns
+    distinct_on: [topology_layer_select_column!]
+
+    # limit the nuber of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [topology_layer_order_by!]
+
+    # filter the rows returned
+    where: topology_layer_bool_exp
+  ): [topology_layer!]!
+
+  # fetch aggregated fields from the table: "topology.layer"
+  topology_layer_aggregate(
+    # distinct select on columns
+    distinct_on: [topology_layer_select_column!]
+
+    # limit the nuber of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [topology_layer_order_by!]
+
+    # filter the rows returned
+    where: topology_layer_bool_exp
+  ): topology_layer_aggregate!
+
+  # fetch data from the table: "topology.layer" using primary key columns
+  topology_layer_by_pk(layer_id: Int!, topology_id: Int!): topology_layer
+
+  # fetch data from the table: "waze2018"
+  waze2018(
+    # distinct select on columns
+    distinct_on: [waze2018_select_column!]
+
+    # limit the nuber of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [waze2018_order_by!]
+
+    # filter the rows returned
+    where: waze2018_bool_exp
+  ): [waze2018!]!
+
+  # fetch aggregated fields from the table: "waze2018"
+  waze2018_aggregate(
+    # distinct select on columns
+    distinct_on: [waze2018_select_column!]
+
+    # limit the nuber of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [waze2018_order_by!]
+
+    # filter the rows returned
+    where: waze2018_bool_exp
+  ): waze2018_aggregate!
+
+  # fetch data from the table: "waze2018" using primary key columns
+  waze2018_by_pk(event_id: String!): waze2018
+}
+
+# expression to compare columns of type text. All fields are combined with logical 'AND'.
+input text_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+scalar timestamp
+
+# expression to compare columns of type timestamp. All fields are combined with logical 'AND'.
+input timestamp_comparison_exp {
+  _eq: timestamp
+  _gt: timestamp
+  _gte: timestamp
+  _in: [timestamp]
+  _is_null: Boolean
+  _lt: timestamp
+  _lte: timestamp
+  _neq: timestamp
+  _nin: [timestamp]
+}
+
+# columns and relationships of "topology.layer"
+type topology_layer {
+  child_id: Int
+  feature_column: String!
+  feature_type: Int!
+  layer_id: Int!
+  level: Int!
+  schema_name: String!
+  table_name: String!
+  topology_id: Int!
+}
+
+# aggregated selection of "topology.layer"
+type topology_layer_aggregate {
+  aggregate: topology_layer_aggregate_fields
+  nodes: [topology_layer!]!
+}
+
+# aggregate fields of "topology.layer"
+type topology_layer_aggregate_fields {
+  avg: topology_layer_avg_fields
+  count(columns: [topology_layer_select_column!], distinct: Boolean): Int
+  max: topology_layer_max_fields
+  min: topology_layer_min_fields
+  stddev: topology_layer_stddev_fields
+  stddev_pop: topology_layer_stddev_pop_fields
+  stddev_samp: topology_layer_stddev_samp_fields
+  sum: topology_layer_sum_fields
+  var_pop: topology_layer_var_pop_fields
+  var_samp: topology_layer_var_samp_fields
+  variance: topology_layer_variance_fields
+}
+
+# input type for inserting array relation for remote table "topology.layer"
+input topology_layer_arr_rel_insert_input {
+  data: [topology_layer_insert_input!]!
+  on_conflict: topology_layer_on_conflict
+}
+
+# aggregate avg on columns
+type topology_layer_avg_fields {
+  child_id: Float
+  feature_type: Float
+  layer_id: Float
+  level: Float
+  topology_id: Float
+}
+
+# Boolean expression to filter rows from the table "topology.layer". All fields are combined with a logical 'AND'.
+input topology_layer_bool_exp {
+  _and: [topology_layer_bool_exp]
+  _not: topology_layer_bool_exp
+  _or: [topology_layer_bool_exp]
+  child_id: integer_comparison_exp
+  feature_column: varchar_comparison_exp
+  feature_type: integer_comparison_exp
+  layer_id: integer_comparison_exp
+  level: integer_comparison_exp
+  schema_name: varchar_comparison_exp
+  table_name: varchar_comparison_exp
+  topology_id: integer_comparison_exp
+}
+
+# unique or primary key constraints on table "topology.layer"
+enum topology_layer_constraint {
+  # unique or primary key constraint
+  layer_pkey
+
+  # unique or primary key constraint
+  layer_schema_name_table_name_feature_column_key
+}
+
+# input type for incrementing integer columne in table "topology.layer"
+input topology_layer_inc_input {
+  child_id: Int
+  feature_type: Int
+  layer_id: Int
+  level: Int
+  topology_id: Int
+}
+
+# input type for inserting data into table "topology.layer"
+input topology_layer_insert_input {
+  child_id: Int
+  feature_column: String
+  feature_type: Int
+  layer_id: Int
+  level: Int
+  schema_name: String
+  table_name: String
+  topology_id: Int
+}
+
+# aggregate max on columns
+type topology_layer_max_fields {
+  child_id: Int
+  feature_column: String
+  feature_type: Int
+  layer_id: Int
+  level: Int
+  schema_name: String
+  table_name: String
+  topology_id: Int
+}
+
+# aggregate min on columns
+type topology_layer_min_fields {
+  child_id: Int
+  feature_column: String
+  feature_type: Int
+  layer_id: Int
+  level: Int
+  schema_name: String
+  table_name: String
+  topology_id: Int
+}
+
+# response of any mutation on the table "topology.layer"
+type topology_layer_mutation_response {
+  # number of affected rows by the mutation
+  affected_rows: Int!
+
+  # data of the affected rows by the mutation
+  returning: [topology_layer!]!
+}
+
+# input type for inserting object relation for remote table "topology.layer"
+input topology_layer_obj_rel_insert_input {
+  data: topology_layer_insert_input!
+  on_conflict: topology_layer_on_conflict
+}
+
+# on conflict condition type for table "topology.layer"
+input topology_layer_on_conflict {
+  # action when conflict occurs (deprecated)
+  action: conflict_action
+  constraint: topology_layer_constraint!
+  update_columns: [topology_layer_update_column!]
+}
+
+# ordering options when selecting data from "topology.layer"
+input topology_layer_order_by {
+  child_id: order_by
+  feature_column: order_by
+  feature_type: order_by
+  layer_id: order_by
+  level: order_by
+  schema_name: order_by
+  table_name: order_by
+  topology_id: order_by
+}
+
+# select columns of table "topology.layer"
+enum topology_layer_select_column {
+  # column name
+  child_id
+
+  # column name
+  feature_column
+
+  # column name
+  feature_type
+
+  # column name
+  layer_id
+
+  # column name
+  level
+
+  # column name
+  schema_name
+
+  # column name
+  table_name
+
+  # column name
+  topology_id
+}
+
+# input type for updating data in table "topology.layer"
+input topology_layer_set_input {
+  child_id: Int
+  feature_column: String
+  feature_type: Int
+  layer_id: Int
+  level: Int
+  schema_name: String
+  table_name: String
+  topology_id: Int
+}
+
+# aggregate stddev on columns
+type topology_layer_stddev_fields {
+  child_id: Float
+  feature_type: Float
+  layer_id: Float
+  level: Float
+  topology_id: Float
+}
+
+# aggregate stddev_pop on columns
+type topology_layer_stddev_pop_fields {
+  child_id: Float
+  feature_type: Float
+  layer_id: Float
+  level: Float
+  topology_id: Float
+}
+
+# aggregate stddev_samp on columns
+type topology_layer_stddev_samp_fields {
+  child_id: Float
+  feature_type: Float
+  layer_id: Float
+  level: Float
+  topology_id: Float
+}
+
+# aggregate sum on columns
+type topology_layer_sum_fields {
+  child_id: Int
+  feature_type: Int
+  layer_id: Int
+  level: Int
+  topology_id: Int
+}
+
+# update columns of table "topology.layer"
+enum topology_layer_update_column {
+  # column name
+  child_id
+
+  # column name
+  feature_column
+
+  # column name
+  feature_type
+
+  # column name
+  layer_id
+
+  # column name
+  level
+
+  # column name
+  schema_name
+
+  # column name
+  table_name
+
+  # column name
+  topology_id
+}
+
+# aggregate var_pop on columns
+type topology_layer_var_pop_fields {
+  child_id: Float
+  feature_type: Float
+  layer_id: Float
+  level: Float
+  topology_id: Float
+}
+
+# aggregate var_samp on columns
+type topology_layer_var_samp_fields {
+  child_id: Float
+  feature_type: Float
+  layer_id: Float
+  level: Float
+  topology_id: Float
+}
+
+# aggregate variance on columns
+type topology_layer_variance_fields {
+  child_id: Float
+  feature_type: Float
+  layer_id: Float
+  level: Float
+  topology_id: Float
+}
+
+# expression to compare columns of type varchar. All fields are combined with logical 'AND'.
+input varchar_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+# columns and relationships of "waze2018"
+type waze2018 {
+  article_code: String
+  city: String
+  close_time: timestamp
+  county: String
+  create_time: timestamp
+  direction: String
+  end_date: timestamp
+  event_class: String
+  event_description: String
+  event_id: String!
+  event_state: String
+  event_type: String
+  facility_name: String
+  from_loc_point: String
+  geom: geometry
+  incident_impact: String
+  last_update: timestamp
+  lat: float8
+  lon: float8
+  start_date: timestamp
+  state: String
+  to_lat: float8
+  to_loc_point: String
+  to_lon: float8
+  update_number: Int
+  waze_event_id: String
+}
+
+# aggregated selection of "waze2018"
+type waze2018_aggregate {
+  aggregate: waze2018_aggregate_fields
+  nodes: [waze2018!]!
+}
+
+# aggregate fields of "waze2018"
+type waze2018_aggregate_fields {
+  avg: waze2018_avg_fields
+  count(columns: [waze2018_select_column!], distinct: Boolean): Int
+  max: waze2018_max_fields
+  min: waze2018_min_fields
+  stddev: waze2018_stddev_fields
+  stddev_pop: waze2018_stddev_pop_fields
+  stddev_samp: waze2018_stddev_samp_fields
+  sum: waze2018_sum_fields
+  var_pop: waze2018_var_pop_fields
+  var_samp: waze2018_var_samp_fields
+  variance: waze2018_variance_fields
+}
+
+# input type for inserting array relation for remote table "waze2018"
+input waze2018_arr_rel_insert_input {
+  data: [waze2018_insert_input!]!
+  on_conflict: waze2018_on_conflict
+}
+
+# aggregate avg on columns
+type waze2018_avg_fields {
+  lat: Float
+  lon: Float
+  to_lat: Float
+  to_lon: Float
+  update_number: Float
+}
+
+# Boolean expression to filter rows from the table "waze2018". All fields are combined with a logical 'AND'.
+input waze2018_bool_exp {
+  _and: [waze2018_bool_exp]
+  _not: waze2018_bool_exp
+  _or: [waze2018_bool_exp]
+  article_code: text_comparison_exp
+  city: varchar_comparison_exp
+  close_time: timestamp_comparison_exp
+  county: varchar_comparison_exp
+  create_time: timestamp_comparison_exp
+  direction: varchar_comparison_exp
+  end_date: timestamp_comparison_exp
+  event_class: varchar_comparison_exp
+  event_description: text_comparison_exp
+  event_id: varchar_comparison_exp
+  event_state: varchar_comparison_exp
+  event_type: varchar_comparison_exp
+  facility_name: varchar_comparison_exp
+  from_loc_point: text_comparison_exp
+  geom: geometry_comparison_exp
+  incident_impact: text_comparison_exp
+  last_update: timestamp_comparison_exp
+  lat: float8_comparison_exp
+  lon: float8_comparison_exp
+  start_date: timestamp_comparison_exp
+  state: varchar_comparison_exp
+  to_lat: float8_comparison_exp
+  to_loc_point: text_comparison_exp
+  to_lon: float8_comparison_exp
+  update_number: integer_comparison_exp
+  waze_event_id: text_comparison_exp
+}
+
+# unique or primary key constraints on table "waze2018"
+enum waze2018_constraint {
+  # unique or primary key constraint
+  waze2018_event_id_key
+
+  # unique or primary key constraint
+  waze2018_pkey
+}
+
+# input type for incrementing integer columne in table "waze2018"
+input waze2018_inc_input {
+  update_number: Int
+}
+
+# input type for inserting data into table "waze2018"
+input waze2018_insert_input {
+  article_code: String
+  city: String
+  close_time: timestamp
+  county: String
+  create_time: timestamp
+  direction: String
+  end_date: timestamp
+  event_class: String
+  event_description: String
+  event_id: String
+  event_state: String
+  event_type: String
+  facility_name: String
+  from_loc_point: String
+  geom: geometry
+  incident_impact: String
+  last_update: timestamp
+  lat: float8
+  lon: float8
+  start_date: timestamp
+  state: String
+  to_lat: float8
+  to_loc_point: String
+  to_lon: float8
+  update_number: Int
+  waze_event_id: String
+}
+
+# aggregate max on columns
+type waze2018_max_fields {
+  article_code: String
+  city: String
+  county: String
+  direction: String
+  event_class: String
+  event_description: String
+  event_id: String
+  event_state: String
+  event_type: String
+  facility_name: String
+  from_loc_point: String
+  incident_impact: String
+  lat: float8
+  lon: float8
+  state: String
+  to_lat: float8
+  to_loc_point: String
+  to_lon: float8
+  update_number: Int
+  waze_event_id: String
+}
+
+# aggregate min on columns
+type waze2018_min_fields {
+  article_code: String
+  city: String
+  county: String
+  direction: String
+  event_class: String
+  event_description: String
+  event_id: String
+  event_state: String
+  event_type: String
+  facility_name: String
+  from_loc_point: String
+  incident_impact: String
+  lat: float8
+  lon: float8
+  state: String
+  to_lat: float8
+  to_loc_point: String
+  to_lon: float8
+  update_number: Int
+  waze_event_id: String
+}
+
+# response of any mutation on the table "waze2018"
+type waze2018_mutation_response {
+  # number of affected rows by the mutation
+  affected_rows: Int!
+
+  # data of the affected rows by the mutation
+  returning: [waze2018!]!
+}
+
+# input type for inserting object relation for remote table "waze2018"
+input waze2018_obj_rel_insert_input {
+  data: waze2018_insert_input!
+  on_conflict: waze2018_on_conflict
+}
+
+# on conflict condition type for table "waze2018"
+input waze2018_on_conflict {
+  # action when conflict occurs (deprecated)
+  action: conflict_action
+  constraint: waze2018_constraint!
+  update_columns: [waze2018_update_column!]
+}
+
+# ordering options when selecting data from "waze2018"
+input waze2018_order_by {
+  article_code: order_by
+  city: order_by
+  close_time: order_by
+  county: order_by
+  create_time: order_by
+  direction: order_by
+  end_date: order_by
+  event_class: order_by
+  event_description: order_by
+  event_id: order_by
+  event_state: order_by
+  event_type: order_by
+  facility_name: order_by
+  from_loc_point: order_by
+  geom: order_by
+  incident_impact: order_by
+  last_update: order_by
+  lat: order_by
+  lon: order_by
+  start_date: order_by
+  state: order_by
+  to_lat: order_by
+  to_loc_point: order_by
+  to_lon: order_by
+  update_number: order_by
+  waze_event_id: order_by
+}
+
+# select columns of table "waze2018"
+enum waze2018_select_column {
+  # column name
+  article_code
+
+  # column name
+  city
+
+  # column name
+  close_time
+
+  # column name
+  county
+
+  # column name
+  create_time
+
+  # column name
+  direction
+
+  # column name
+  end_date
+
+  # column name
+  event_class
+
+  # column name
+  event_description
+
+  # column name
+  event_id
+
+  # column name
+  event_state
+
+  # column name
+  event_type
+
+  # column name
+  facility_name
+
+  # column name
+  from_loc_point
+
+  # column name
+  geom
+
+  # column name
+  incident_impact
+
+  # column name
+  last_update
+
+  # column name
+  lat
+
+  # column name
+  lon
+
+  # column name
+  start_date
+
+  # column name
+  state
+
+  # column name
+  to_lat
+
+  # column name
+  to_loc_point
+
+  # column name
+  to_lon
+
+  # column name
+  update_number
+
+  # column name
+  waze_event_id
+}
+
+# input type for updating data in table "waze2018"
+input waze2018_set_input {
+  article_code: String
+  city: String
+  close_time: timestamp
+  county: String
+  create_time: timestamp
+  direction: String
+  end_date: timestamp
+  event_class: String
+  event_description: String
+  event_id: String
+  event_state: String
+  event_type: String
+  facility_name: String
+  from_loc_point: String
+  geom: geometry
+  incident_impact: String
+  last_update: timestamp
+  lat: float8
+  lon: float8
+  start_date: timestamp
+  state: String
+  to_lat: float8
+  to_loc_point: String
+  to_lon: float8
+  update_number: Int
+  waze_event_id: String
+}
+
+# aggregate stddev on columns
+type waze2018_stddev_fields {
+  lat: Float
+  lon: Float
+  to_lat: Float
+  to_lon: Float
+  update_number: Float
+}
+
+# aggregate stddev_pop on columns
+type waze2018_stddev_pop_fields {
+  lat: Float
+  lon: Float
+  to_lat: Float
+  to_lon: Float
+  update_number: Float
+}
+
+# aggregate stddev_samp on columns
+type waze2018_stddev_samp_fields {
+  lat: Float
+  lon: Float
+  to_lat: Float
+  to_lon: Float
+  update_number: Float
+}
+
+# aggregate sum on columns
+type waze2018_sum_fields {
+  lat: float8
+  lon: float8
+  to_lat: float8
+  to_lon: float8
+  update_number: Int
+}
+
+# update columns of table "waze2018"
+enum waze2018_update_column {
+  # column name
+  article_code
+
+  # column name
+  city
+
+  # column name
+  close_time
+
+  # column name
+  county
+
+  # column name
+  create_time
+
+  # column name
+  direction
+
+  # column name
+  end_date
+
+  # column name
+  event_class
+
+  # column name
+  event_description
+
+  # column name
+  event_id
+
+  # column name
+  event_state
+
+  # column name
+  event_type
+
+  # column name
+  facility_name
+
+  # column name
+  from_loc_point
+
+  # column name
+  geom
+
+  # column name
+  incident_impact
+
+  # column name
+  last_update
+
+  # column name
+  lat
+
+  # column name
+  lon
+
+  # column name
+  start_date
+
+  # column name
+  state
+
+  # column name
+  to_lat
+
+  # column name
+  to_loc_point
+
+  # column name
+  to_lon
+
+  # column name
+  update_number
+
+  # column name
+  waze_event_id
+}
+
+# aggregate var_pop on columns
+type waze2018_var_pop_fields {
+  lat: Float
+  lon: Float
+  to_lat: Float
+  to_lon: Float
+  update_number: Float
+}
+
+# aggregate var_samp on columns
+type waze2018_var_samp_fields {
+  lat: Float
+  lon: Float
+  to_lat: Float
+  to_lon: Float
+  update_number: Float
+}
+
+# aggregate variance on columns
+type waze2018_variance_fields {
+  lat: Float
+  lon: Float
+  to_lat: Float
+  to_lon: Float
+  update_number: Float
+}
+

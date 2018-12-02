@@ -1,0 +1,8 @@
+
+{
+  waze2018(where:{event_id: { _eq: "'2018110500404000005075'"}}) {
+    event_id
+    event_description
+    event_class
+  }
+}
